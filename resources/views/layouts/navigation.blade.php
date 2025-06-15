@@ -36,14 +36,28 @@
             {{ __('Shoes') }}
           </x-nav-link>
         </div>
-
-
-
       </div>
 
       <!-- Settings Dropdown -->
       <div class="hidden sm:flex sm:items-center sm:ms-6">
-        <x-dropdown align="right" width="48">
+        <div x-data="{ showSearch: false }" class="flex items-center space-x-4 relative">
+          <!-- Search Icon (toggle search input) -->
+          <button type="button" @click="showSearch = !showSearch">
+            <x-css-search class="w-5 h-5 text-gray-500" />
+          </button>
+
+          <!-- Shopping Bag Icon -->
+          <x-tni-bag class="w-5 h-5 text-gray-500" />
+
+          <!-- Search Input (use x-show instead of x-if) -->
+          <div x-show="showSearch" @click.outside="showSearch = false" x-transition
+            class="absolute md:right-16 md:-top-[3.2rem] mt-10 w-64">
+            <input type="text" placeholder="Search..." class="w-full px-3 py-2 border border-gray-300 rounded shadow focus:outline-none focus:ring-2 focus:ring-[#F5DDBA50] focus:border-[#D4C4B2]"
+              x-ref="searchInput" x-init="$nextTick(() => $refs.searchInput.focus())" />
+          </div>
+        </div>
+
+        <x-dropdown x-align="right" width="48">
           <x-slot name="trigger">
             <button
               class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
@@ -94,11 +108,35 @@
   </div>
 
   <!-- Responsive Navigation Menu -->
-  <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
+  <div :class="{ 'block': open, 'hidden': !open }"
+    class="hidden sm:hidden absolute h-full inset-x-0 top-16 bg-white transition transform origin-top-right z-50">
     <div class="pt-2 pb-3 space-y-1">
-      <x-responsive-nav-link :href="route('home')" :active="request()->routeIs('dashboard')">
-        {{ __('Dashboard') }}
+      <!-- Search Input -->
+      <div class="px-4">
+        <input type="text" placeholder="Search..."
+          class="w-full px-3 py-2 border border-gray-300 rounded shadow focus:outline-none focus:ring-2 focus:ring-[#F5DDBA50] focus:border-[#D4C4B2]"
+          x-ref="searchInput" x-init="$nextTick(() => $refs.searchInput.focus())" />
+      </div>
+      <!-- Responsive Navigation Links -->
+      <x-responsive-nav-link :href="route('home')" :active="request()->routeIs('home') && !request('category')">
+        {{ __('Home') }}
       </x-responsive-nav-link>
+      <x-responsive-nav-link :href="route('home', ['category' => 't-shirt'])" :active="request('category') === 't-shirt'">
+        {{ __('T-Shirt') }}
+      </x-responsive-nav-link>
+      <x-responsive-nav-link :href="route('home', ['category' => 'jackets'])" :active="request('category') === 'jackets'">
+        {{ __('Jackets') }}
+      </x-responsive-nav-link>
+      <x-responsive-nav-link :href="route('home', ['category' => 'shorts'])" :active="request('category') === 'shorts'">
+        {{ __('Shorts') }}
+      </x-responsive-nav-link>
+      <x-responsive-nav-link :href="route('home', ['category' => 'jeans'])" :active="request('category') === 'jeans'">
+        {{ __('Jeans') }}
+      </x-responsive-nav-link>
+      <x-responsive-nav-link :href="route('home', ['category' => 'shoes'])" :active="request('category') === 'shoes'">
+        {{ __('Shoes') }}
+      </x-responsive-nav-link>
+
     </div>
 
     <!-- Responsive Settings Options -->
