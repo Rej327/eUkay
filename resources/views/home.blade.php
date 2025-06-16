@@ -10,7 +10,7 @@
       {{ __('This is :category page', ['category' => ucfirst($category)]) }}
     </div>
   @else
-    @include('.sections.home.hero')
+    @include('.sections.home.main')
   @endif
 
 
