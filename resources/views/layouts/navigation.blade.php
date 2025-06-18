@@ -29,7 +29,7 @@
           </x-nav-link>
 
           <x-nav-link :href="route('home', ['category' => 'jeans'])" :active="request('category') === 'jeans'">
-            {{ __('Jeans') }}
+            {{ __('Pants') }}
           </x-nav-link>
 
           <x-nav-link :href="route('home', ['category' => 'shoes'])" :active="request('category') === 'shoes'">
@@ -131,7 +131,7 @@
         {{ __('Shorts') }}
       </x-responsive-nav-link>
       <x-responsive-nav-link :href="route('home', ['category' => 'jeans'])" :active="request('category') === 'jeans'">
-        {{ __('Jeans') }}
+        {{ __('Pants') }}
       </x-responsive-nav-link>
       <x-responsive-nav-link :href="route('home', ['category' => 'shoes'])" :active="request('category') === 'shoes'">
         {{ __('Shoes') }}

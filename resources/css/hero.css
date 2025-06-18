@@ -1,5 +1,6 @@
 .bg-image {
-  background-image: url('/images/heroImage.png');
+  /* background-image: url('/images/heroImage.png'); */
+  background-color: #E4DBD5;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
