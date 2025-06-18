@@ -1,6 +1,5 @@
 <div class="mt-20 mb-10">
-  <h3 class="text-center text-3xl md:text-6xl">Shop by category</h3>
-
+  <h3 class="text-center uppercase text-4xl md:text-6xl">Shop by category</h3>
   <!-- Category Grid -->
   <div class="mt-20 flex flex-wrap items-center justify-center gap-6 w-full mx-auto px-4">
 
