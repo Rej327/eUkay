@@ -18,7 +18,7 @@
 </head>
 
 <body class="font-sans antialiased">
-  <div class="min-h-screen bg-gray-100">
+  <div class="min-h-screen bg-white">
     @include('layouts.navigation')
 
     <!-- Page Heading -->
@@ -34,6 +34,10 @@
     <main class="bg-white">
       {{ $slot }}
     </main>
+
+    <!-- Footer -->
+    @include('layouts.footer')
+    
   </div>
   <script src="//unpkg.com/alpinejs" defer></script>
 </body>
