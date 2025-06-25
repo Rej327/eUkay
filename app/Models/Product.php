@@ -9,14 +9,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Product extends Model
 {
     protected $fillable = [
-        'seller_id', 'category_id', 'name', 'description', 'price', 'stock'
+        'category_id', 'name', 'description', 'price', 'stock'
     ];
-    
 
-    public function seller(): BelongsTo
-    {
-        return $this->belongsTo(Seller::class);
-    }
 
     public function images()
     {

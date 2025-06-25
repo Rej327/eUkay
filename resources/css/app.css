@@ -54,3 +54,10 @@ p {
 .secondary-text-color {
     color: #38312b;
 }
+
+.select-no-arrow {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: none !important;
+}

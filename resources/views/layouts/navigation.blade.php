@@ -52,7 +52,8 @@
           <!-- Search Input (use x-show instead of x-if) -->
           <div x-show="showSearch" @click.outside="showSearch = false" x-transition
             class="absolute md:right-16 md:-top-[3.2rem] mt-10 w-64">
-            <input type="text" placeholder="Search..." class="w-full px-3 py-2 border border-gray-300 rounded shadow focus:outline-none focus:ring-2 focus:ring-[#F5DDBA50] focus:border-[#D4C4B2]"
+            <input type="text" placeholder="Search..."
+              class="w-full px-3 py-2 border border-gray-300 rounded shadow focus:outline-none focus:ring-2 focus:ring-[#F5DDBA50] focus:border-[#D4C4B2]"
               x-ref="searchInput" x-init="$nextTick(() => $refs.searchInput.focus())" />
           </div>
         </div>
@@ -77,7 +78,13 @@
             <x-dropdown-link :href="route('profile.edit')">
               {{ __('Profile') }}
             </x-dropdown-link>
-
+            @auth
+              @if (auth()->user()->isAdmin())
+                <x-dropdown-link :href="route('manage-products.index')">
+                  {{ __('My Products') }}
+                </x-dropdown-link>
+              @endif
+            @endauth
             <!-- Authentication -->
             <form method="POST" action="{{ route('logout') }}">
               @csrf

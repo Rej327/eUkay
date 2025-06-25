@@ -47,10 +47,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-
-    public function seller(): HasOne
+    public function isAdmin(): bool
     {
-        return $this->hasOne(Seller::class);
+        return $this->id === 1;
     }
 
     public function addresses(): HasMany
