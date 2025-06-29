@@ -32,7 +32,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('address', AddressController::class);
     
     Route::get('/manage-products', [ProductController::class, 'index'])->name('manage-products.index');
-    Route::get('/manage-products/create', [ProductController::class, 'create'])->name('manage-products.create');
+    // Route::get('/manage-products/create', [ProductController::class, 'create'])->name('manage-products.create');
     Route::post('/manage-products', [ProductController::class, 'store'])->name('manage-products.store');
     Route::get('/manage-products/{product}/edit', [ProductController::class, 'edit'])->name('manage-products.edit');
     Route::put('/manage-products/{product}', [ProductController::class, 'update'])->name('manage-products.update');
