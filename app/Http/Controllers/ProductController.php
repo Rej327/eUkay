@@ -45,7 +45,7 @@ class ProductController extends Controller
                 'price' => 'required|numeric|min:0',
                 'stock' => 'required|integer|min:0',
                 'category_id' => 'required|exists:categories,id',
-                'image' => 'nullable|image|mimes:jpg,jpeg,png,webp,avif|max:2048',
+                'image' => 'required|image|mimes:jpg,jpeg,png,webp,avif|max:2048',
             ]);
 
             $product = Product::create($validated);
@@ -62,6 +62,8 @@ class ProductController extends Controller
             }
 
             return redirect()->route('manage-products.index')->with('success', 'Product added successfully.');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return redirect()->back()->withErrors($e->validator)->withInput();
         } catch (\Exception $e) {
             return redirect()->route('manage-products.index')->with('error', 'Failed to add product.');
         }
@@ -111,10 +113,24 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         try {
+            // Delete image files from storage
+            foreach ($product->images as $image) {
+                if (Storage::disk('public')->exists($image->image_path)) {
+                    Storage::disk('public')->delete($image->image_path);
+                }
+
+                // Optionally delete the image record in the DB
+                $image->delete();
+            }
+
+            // Delete the product record
             $product->delete();
+
             return redirect()->route('manage-products.index')->with('success', 'Product deleted successfully.');
         } catch (\Exception $e) {
             return redirect()->route('manage-products.index')->with('error', 'Failed to delete product.');
         }
     }
+
+
 }

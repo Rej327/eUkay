@@ -1,13 +1,17 @@
 <x-app-layout>
   <div x-data="productModal()" x-init="@if (session('success')) showToast(@js(session('success')));
-    @elseif(session('error'))
-      showToast(@js(session('error')), 'error'); @endif" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 relative">
+  @elseif(session('error'))
+    showToast(@js(session('error')), 'error'); @endif
+  
+  @if ($errors->any()) openServerErrorModal(window.oldValues, window.validationErrors); @endif" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 relative">
 
     <!-- Toast -->
     <template x-if="toast.show">
-      <div x-transition class="fixed top-6 right-6 bg-green-500 text-white px-4 py-2 rounded shadow"
-        x-text="toast.message"></div>
+      <div x-transition class="fixed top-6 right-6 text-white px-4 py-2 rounded shadow"
+        :class="toast.type === 'error' ? 'bg-red-500' : 'bg-green-500'" x-text="toast.message">
+      </div>
     </template>
+
 
     <!-- Header -->
     <div class="flex justify-between items-center mb-6">
@@ -42,6 +46,10 @@
               Stock
               <span x-show="sortBy === 'stock'" x-text="sortDir === 'asc' ? '▲' : '▼'"></span>
             </th>
+            <th class="px-4 py-3 text-left cursor-pointer" @click="sort('updated_at')">
+              Last Modified
+              <span x-show="sortBy === 'updated_at'" x-text="sortDir === 'asc' ? '▲' : '▼'"></span>
+            </th>
             <th class="px-4 py-3 text-left">Actions</th>
           </tr>
         </thead>
@@ -65,6 +73,17 @@
                 <td class="px-4 py-3 font-medium" x-text="product.name"></td>
                 <td class="px-4 py-3" x-text="`₱ ${parseFloat(product.price).toFixed(2)}`"></td>
                 <td class="px-4 py-3" x-text="product.stock"></td>
+                <td class="px-4 py-3"
+                  x-text="new Date(product.updated_at).toLocaleString('en-US', { 
+                            month: 'short', 
+                            day: 'numeric', 
+                            year: 'numeric', 
+                            hour: 'numeric', 
+                            minute: '2-digit', 
+                            hour12: true 
+                        })">
+                </td>
+
                 <td class="px-4 py-3">
                   <div class="flex gap-3 items-center">
                     <button @click="openEditModal(product)"
@@ -102,25 +121,86 @@
           </template>
           @csrf
 
-          <input name="name" x-model="form.name" placeholder="Product Name"
-            class="border border-gray-300 p-2 w-full mt-2 rounded" required />
-          <input name="price" type="number" step="0.01" placeholder="Price" x-model="form.price"
-            class="border border-gray-300 p-2 w-full mt-4 rounded" required />
-          <input name="stock" type="number" placeholder="Stock" x-model="form.stock"
-            class="border border-gray-300 p-2 w-full mt-4 rounded" required />
-          <textarea name="description" placeholder="Description" x-text="form.description"
-            class="border border-gray-300 p-2 w-full mt-4 rounded resize-none" rows="3" required></textarea>
-          <select name="category_id" class="border border-gray-300 p-2 w-full mt-4 rounded" required>
-            <option value="">Select Category</option>
-            @foreach ($categories as $category)
-              <option :selected="form.category_id == {{ $category->id }}" value="{{ $category->id }}">
-                {{ $category->name }}</option>
-            @endforeach
-          </select>
-          <label class="block mt-4 mb-1 text-sm font-medium text-gray-700">Image</label>
-          <input type="file" name="image" accept="image/*" class="border border-gray-300 p-2 w-full rounded"
-            :required="!isEdit" />
+          <!-- Product Name -->
+          <div class="mt-4">
+            <div class="flex items-center justify-between">
+              <x-input-label for="name" :value="__('Product Name')" />
+              <template x-if="errors.name && errors.name.length">
+                <p class="text-sm text-red-600 font-semibold" x-text="errors.name[0]"></p>
+              </template>
+            </div>
+            <x-text-input id="name" name="name" type="text" x-model="form.name" class="block mt-1 w-full" />
 
+          </div>
+
+          <!-- Price -->
+          <div class="mt-4">
+            <div class="flex items-center justify-between">
+              <x-input-label for="price" :value="__('Price')" />
+              <template x-if="errors.price && errors.price.length">
+                <p class="text-sm text-red-600 font-semibold" x-text="errors.price[0]"></p>
+              </template>
+            </div>
+            <x-text-input id="price" name="price" type="number" step="0.01" x-model="form.price"
+              class="block mt-1 w-full" />
+          </div>
+
+          <!-- Stock -->
+          <div class="mt-4">
+            <div class="flex items-center justify-between">
+              <x-input-label for="stock" :value="__('Stock')" />
+              <template x-if="errors.stock && errors.stock.length">
+                <p class="text-sm text-red-600 font-semibold" x-text="errors.stock[0]"></p>
+              </template>
+            </div>
+            <x-text-input id="stock" name="stock" type="number" x-model="form.stock"
+              class="block mt-1 w-full" />
+          </div>
+
+          <!-- Description -->
+          <div class="mt-4">
+            <div class="flex items-center justify-between">
+              <x-input-label for="description" :value="__('Description')" />
+              <template x-if="errors.description && errors.description.length">
+                <p class="text-sm text-red-600 font-semibold" x-text="errors.description[0]"></p>
+              </template>
+            </div>
+            <textarea id="description" name="description" x-model="form.description"
+              class="block mt-1 w-full border-gray-300 focus:border-[#4b433c] focus:ring-[#4b433c] rounded-md shadow-sm resize-none"
+              rows="3"></textarea>
+          </div>
+
+          <!-- Category -->
+          <div class="mt-4">
+            <div class="flex items-center justify-between">
+              <x-input-label for="category_id" :value="__('Category')" />
+              <template x-if="errors.category_id && errors.category_id.length">
+                <p class="text-sm text-red-600 font-semibold" x-text="errors.category_id[0]"></p>
+              </template>
+            </div>
+            <select id="category_id" name="category_id" x-model="form.category_id"
+              class="block mt-1 w-full border-gray-300 focus:border-[#4b433c] focus:ring-[#4b433c] rounded-md shadow-sm">
+              <option value="">Select Category</option>
+              @foreach ($categories as $category)
+                <option value="{{ $category->id }}">{{ $category->name }}</option>
+              @endforeach
+            </select>
+          </div>
+
+          <!-- Image Upload -->
+          <div class="mt-4">
+            <div class="flex items-center justify-between">
+              <x-input-label for="image" :value="__('Product Image')" />
+              <template x-if="errors.image && errors.image.length">
+                <p class="text-sm text-red-600 font-semibold" x-text="errors.image[0]"></p>
+              </template>
+            </div>
+            <input id="image" name="image" type="file" accept="image/*"
+              class="block mt-1 w-full border-gray-300 focus:border-[#4b433c] focus:ring-[#4b433c] shadow-sm" />
+          </div>
+
+
+          <!-- Show current image if editing -->
           <template x-if="isEdit && form.image_url">
             <div class="mt-4">
               <p class="text-sm mb-2">Current Image:</p>
@@ -128,6 +208,7 @@
             </div>
           </template>
 
+          <!-- Actions -->
           <div class="mt-6 flex justify-end gap-3">
             <button type="button" @click="closeModal"
               class="px-4 py-2 rounded border text-[#4B433C] border-[#4B433C] hover:bg-gray-100 transition">
@@ -140,6 +221,7 @@
         </form>
       </div>
     </div>
+
 
     <!-- Delete Confirmation Modal -->
     <div x-show="deleteConfirm.show" x-cloak class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
@@ -168,5 +250,13 @@
     window.initialProducts = @json($products);
     window.routeStore = @json(route('manage-products.store'));
   </script>
+
+  @if ($errors->any())
+    <script>
+      window.validationErrors = @json($errors->messages());
+      window.oldValues = @json(old());
+    </script>
+  @endif
+
 
 </x-app-layout>

@@ -27,6 +27,23 @@ export default function () {
       };
     },
 
+    openServerErrorModal(oldValues, validationErrors = {}) {
+        this.modalOpen = true;
+        this.isEdit = oldValues.is_edit === '1';
+
+        this.form = {
+            id: oldValues.id || null,
+            name: oldValues.name || '',
+            price: oldValues.price || '',
+            stock: oldValues.stock || '',
+            description: oldValues.description || '',
+            category_id: oldValues.category_id || '',
+            image_url: oldValues.image_url || null,
+        };
+
+        this.errors = validationErrors || {};
+    },
+
     get sortedProducts() {
       const sorted = [...this.filteredProducts];
       const key = this.sortBy;
