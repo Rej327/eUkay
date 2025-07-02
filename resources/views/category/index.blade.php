@@ -77,7 +77,7 @@
       </div>
       <div class="px-2 flex items-center justify-center gap-4 mt-2">
         <x-secondary-button class="w-full flex justify-center items-center">
-          <a href="" clas>Details</a>
+          <a href="{{ route('product.show', ['product' => 1]) }}" class>Details</a>
         </x-secondary-button>
         <x-primary-button class="w-full flex justify-center items-center">
           <a href="" clas>Add to Cart</a>

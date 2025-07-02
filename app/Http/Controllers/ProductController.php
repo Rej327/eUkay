@@ -32,6 +32,13 @@ class ProductController extends Controller
     //     return view('store.edit', compact('categories'));
     // }
 
+        public function show(Product $product)
+    {
+        // $product->load('images');
+        // return view('store.show', compact('product'));
+        return view('category.show');
+    }
+
     public function store(Request $request)
     {
         if (!auth()->user()->isAdmin()) {

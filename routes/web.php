@@ -6,6 +6,7 @@ use App\Http\Controllers\AddressController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StoreItems;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -39,6 +40,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/manage-products/{product}', [ProductController::class, 'destroy'])->name('manage-products.destroy');
 
     // Route::get('/address/{address}/edit', [AddressController::class, 'edit'])->name('address.edit');
+
+    Route::get('/product', [StoreItems::class, 'show'])->name('product.show');
+
         
 });
 
