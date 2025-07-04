@@ -2,4 +2,3 @@
 @include('.sections.home.shop-by-category')
 @include('.sections.home.banner')
 @include('.sections.home.top-picks')
-@include('.sections.home.get-the-latest-trend')

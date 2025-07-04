@@ -29,6 +29,8 @@
       {{ $slot }}
     </main>
     <!-- Footer -->
+
+    @include('.sections.home.get-the-latest-trend')
     @include('layouts.footer')
   </div>
 </body>

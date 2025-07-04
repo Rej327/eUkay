@@ -3,6 +3,7 @@
 
 
 use App\Http\Controllers\AddressController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
@@ -42,6 +43,8 @@ Route::middleware('auth')->group(function () {
     // Route::get('/address/{address}/edit', [AddressController::class, 'edit'])->name('address.edit');
 
     Route::get('/product', [StoreItems::class, 'show'])->name('product.show');
+
+    Route::resource('cart', CartController::class)->only(['index', 'store', 'update', 'destroy']);
 
         
 });

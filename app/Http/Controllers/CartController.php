@@ -11,7 +11,9 @@ class CartController extends Controller
      */
     public function index()
     {
-        //
+        // This method is currently empty.
+        // You can implement the logic to display the cart items here.
+        return view('cart.index');
     }
 
     /**

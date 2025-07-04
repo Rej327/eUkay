@@ -47,7 +47,9 @@
           </button>
 
           <!-- Shopping Bag Icon -->
-          <x-tni-bag class="w-5 h-5 text-gray-500" />
+          <a href="{{ route('cart.index') }}">
+            <x-tni-bag class="w-5 h-5 text-gray-500" />
+          </a>
 
           <!-- Search Input (use x-show instead of x-if) -->
           <div x-show="showSearch" @click.outside="showSearch = false" x-transition
