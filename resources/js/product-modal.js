@@ -9,11 +9,37 @@ export default function () {
 
   return {
     routeStore,
-
     ...useToast(),
     ...useModal(),
     ...useSort(),
-    ...useSearch(products),
+
+    search: '',
+    products: products,
+
+    get filteredProducts() {
+      return this.search
+        ? this.products.filter((p) =>
+            p.name.toLowerCase().includes(this.search.toLowerCase())
+          )
+        : this.products;
+    },
+
+    get sortedProducts() {
+      const sorted = [...this.filteredProducts];
+      const key = this.sortBy;
+      const dir = this.sortDir;
+
+      return sorted.sort((a, b) => {
+        let valA = a[key],
+          valB = b[key];
+        if (typeof valA === 'string') valA = valA.toLowerCase();
+        if (typeof valB === 'string') valB = valB.toLowerCase();
+
+        if (valA < valB) return dir === 'asc' ? -1 : 1;
+        if (valA > valB) return dir === 'asc' ? 1 : -1;
+        return 0;
+      });
+    },
 
     deleteConfirm: {
       show: false,
@@ -25,39 +51,6 @@ export default function () {
         show: true,
         id,
       };
-    },
-
-    openServerErrorModal(oldValues, validationErrors = {}) {
-        this.modalOpen = true;
-        this.isEdit = oldValues.is_edit === '1';
-
-        this.form = {
-            id: oldValues.id || null,
-            name: oldValues.name || '',
-            price: oldValues.price || '',
-            stock: oldValues.stock || '',
-            description: oldValues.description || '',
-            category_id: oldValues.category_id || '',
-            image_url: oldValues.image_url || null,
-        };
-
-        this.errors = validationErrors || {};
-    },
-
-    get sortedProducts() {
-      const sorted = [...this.filteredProducts];
-      const key = this.sortBy;
-      const dir = this.sortDir;
-
-      return sorted.sort((a, b) => {
-        let valA = a[key], valB = b[key];
-        if (typeof valA === 'string') valA = valA.toLowerCase();
-        if (typeof valB === 'string') valB = valB.toLowerCase();
-
-        if (valA < valB) return dir === 'asc' ? -1 : 1;
-        if (valA > valB) return dir === 'asc' ? 1 : -1;
-        return 0;
-      });
     },
   };
 }

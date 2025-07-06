@@ -1,6 +1,6 @@
 export function useSearch(products) {
   return {
-    search: '',
+    search: 'shiva',
     products: products,
 
     get filteredProducts() {

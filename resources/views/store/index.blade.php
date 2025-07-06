@@ -17,7 +17,7 @@
     <div class="flex justify-between items-center mb-6">
       <h2 class="text-3xl font-bold text-[#4B433C]">Manage Products</h2>
       <div class="flex items-center gap-3 w-full md:w-auto">
-        <x-text-input type="text" placeholder="Search product name..." x-model="search"
+        <x-text-input type="text" placeholder="Search product name..." x-model.debounce.1000ms="search"
           class="border border-gray-300 rounded px-3 py-2 w-full md:w-64" />
         <button @click="openAddModal"
           class="bg-[#4B433C] hover:bg-[#3a322d] text-white font-medium px-5 py-2 rounded-md shadow transition duration-200">
