@@ -42,7 +42,10 @@ Route::middleware('auth')->group(function () {
 
     // Route::get('/address/{address}/edit', [AddressController::class, 'edit'])->name('address.edit');
 
-    Route::get('/product', [StoreItems::class, 'show'])->name('product.show');
+    // Route::get('/product', [StoreItems::class, 'show'])->name('product.show');
+    Route::get('/product/{product}', [StoreItems::class, 'show'])->name('product.show');
+
+
 
     Route::resource('cart', CartController::class)->only(['index', 'store', 'update', 'destroy']);
 

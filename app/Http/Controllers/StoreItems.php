@@ -37,9 +37,16 @@ class StoreItems extends Controller
 
     public function show(Product $product)
     {
-        // $product->load('images');
-        // return view('store.show', compact('product'));
-        return view('category.show');
+        $product->load('images', 'category');
+
+        $relatedProducts = Product::with('images')
+            ->where('category_id', $product->category_id)
+            ->where('id', '!=', $product->id)
+            ->latest()
+            ->take(3)
+            ->get();
+
+        return view('category.show', compact('product', 'relatedProducts'));
     }
 
     /**

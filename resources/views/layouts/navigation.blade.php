@@ -16,8 +16,8 @@
             {{ __('Home') }}
           </x-nav-link>
 
-          <x-nav-link :href="route('home', ['category' => 't-shirt'])" :active="request('category') === 't-shirt'">
-            {{ __('T-Shirt') }}
+          <x-nav-link :href="route('home', ['category' => 't-shirts'])" :active="request('category') === 't-shirts'">
+            T-shirts
           </x-nav-link>
 
           <x-nav-link :href="route('home', ['category' => 'jackets'])" :active="request('category') === 'jackets'">
@@ -130,8 +130,8 @@
       <x-responsive-nav-link :href="route('home')" :active="request()->routeIs('home') && !request('category')">
         {{ __('Home') }}
       </x-responsive-nav-link>
-      <x-responsive-nav-link :href="route('home', ['category' => 't-shirt'])" :active="request('category') === 't-shirt'">
-        {{ __('T-Shirt') }}
+      <x-responsive-nav-link :href="route('home', ['category' => 't-shirts'])" :active="request('category') === 't-shirts'">
+        T-shirts
       </x-responsive-nav-link>
       <x-responsive-nav-link :href="route('home', ['category' => 'jackets'])" :active="request('category') === 'jackets'">
         {{ __('Jackets') }}
