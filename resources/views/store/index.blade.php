@@ -42,10 +42,6 @@
               Price
               <span x-show="sortBy === 'price'" x-text="sortDir === 'asc' ? '▲' : '▼'"></span>
             </th>
-            <th class="px-4 py-3 text-left cursor-pointer" @click="sort('stock')">
-              Stock
-              <span x-show="sortBy === 'stock'" x-text="sortDir === 'asc' ? '▲' : '▼'"></span>
-            </th>
             <th class="px-4 py-3 text-left cursor-pointer" @click="sort('updated_at')">
               Last Modified
               <span x-show="sortBy === 'updated_at'" x-text="sortDir === 'asc' ? '▲' : '▼'"></span>
@@ -72,7 +68,7 @@
                 </td>
                 <td class="px-4 py-3 font-medium" x-text="product.name"></td>
                 <td class="px-4 py-3" x-text="`₱ ${parseFloat(product.price).toFixed(2)}`"></td>
-                <td class="px-4 py-3" x-text="product.stock"></td>
+             
                 <td class="px-4 py-3"
                   x-text="new Date(product.updated_at).toLocaleString('en-US', { 
                             month: 'short', 
@@ -142,18 +138,6 @@
               </template>
             </div>
             <x-text-input id="price" name="price" type="number" step="0.01" x-model="form.price"
-              class="block mt-1 w-full" />
-          </div>
-
-          <!-- Stock -->
-          <div class="mt-4">
-            <div class="flex items-center justify-between">
-              <x-input-label for="stock" :value="__('Stock')" />
-              <template x-if="errors.stock && errors.stock.length">
-                <p class="text-sm text-red-600 font-semibold" x-text="errors.stock[0]"></p>
-              </template>
-            </div>
-            <x-text-input id="stock" name="stock" type="number" x-model="form.stock"
               class="block mt-1 w-full" />
           </div>
 
