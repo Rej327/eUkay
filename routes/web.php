@@ -45,9 +45,11 @@ Route::middleware('auth')->group(function () {
     // Route::get('/product', [StoreItems::class, 'show'])->name('product.show');
     Route::get('/product/{product}', [StoreItems::class, 'show'])->name('product.show');
 
-
-
     Route::resource('cart', CartController::class)->only(['index', 'store', 'update', 'destroy']);
+    Route::post('/cart/add/{productId}', [CartController::class, 'addToCart'])->name('cart.add');
+    Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.remove');
+    Route::delete('/cart', [CartController::class, 'clear'])->name('cart.clear');
+
 
         
 });

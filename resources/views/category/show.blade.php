@@ -22,14 +22,25 @@
         <p class="text-xl text-[#4B433C] font-semibold mb-2">
           ₱{{ number_format($product->price, 2) }}
         </p>
-        <p class="text-sm text-gray-500 mb-6">Stock: {{ $product->stock }}</p>
-        <p class="text-gray-700 mb-8">{{ $product->description }}</p>
+        <p class="text-sm text-gray-500 mb-6">Description: {{ $product->description }}</p>
 
         <div class="flex flex-wrap gap-4">
-          <button class="px-6 py-2 bg-[#4B433C] text-white rounded inline-flex items-center gap-2">
-            <x-heroicon-o-shopping-cart class="w-5 h-5" />
-            Add to Cart
-          </button>
+          @if (in_array($product->id, $cartItemProductIds ?? []))
+            <button disabled
+              class="px-6 py-2 bg-gray-400 text-white rounded inline-flex items-center gap-2 cursor-not-allowed">
+              <x-heroicon-o-check class="w-5 h-5" />
+              Added
+            </button>
+          @else
+            <form action="{{ route('cart.add', $product->id) }}" method="POST">
+              @csrf
+              <button
+                class="px-6 py-2 bg-[#4B433C] text-white rounded inline-flex items-center gap-2 hover:bg-[#3a322d] transition">
+                <x-heroicon-o-shopping-cart class="w-5 h-5" />
+                Add to Cart
+              </button>
+            </form>
+          @endif
 
           <button class="px-6 py-2 border border-[#4B433C] text-[#4B433C] rounded inline-flex items-center gap-2">
             <x-heroicon-o-heart class="w-5 h-5" />
@@ -66,13 +77,11 @@
               <x-product-details>{{ $related->name }}</x-product-details>
               <x-product-details>₱{{ number_format($related->price, 2) }}</x-product-details>
             </div>
-            <div class="px-2 flex items-center justify-center gap-4 mt-2">
+            <div class="px-2 flex flex-col items-center justify-center gap-2 mt-2">
               <x-secondary-button class="w-full flex justify-center items-center">
                 <a href="{{ route('product.show', $related->id) }}">Details</a>
               </x-secondary-button>
-              <x-primary-button class="w-full flex justify-center items-center">
-                <a href="#">Add to Cart</a>
-              </x-primary-button>
+              @include('components.add-to-cart-form', ['product' => $product])
             </div>
           </div>
         @empty

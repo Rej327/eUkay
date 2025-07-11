@@ -1,31 +1,20 @@
-@php
-  $cartItems = [
-      [
-          'id' => 1,
-          'name' => 'Mock T-Shirt',
-          'image' => '/storage/products/1751429048_6864afb82fe32.jpg',
-          'price' => 499.0,
-          'quantity' => 1,
-      ],
-      [
-          'id' => 2,
-          'name' => 'Mock Hoodie',
-          'image' => '/storage/products/1751429048_6864afb82fe32.jpg',
-          'price' => 399.0,
-          'quantity' => 1,
-      ],
-  ];
-
-  $subtotal = collect($cartItems)->sum(fn($item) => $item['price'] * $item['quantity']);
-  $shippingFee = $subtotal > 1000 ? 0.0 : 10.0;
-  $total = $subtotal + $shippingFee;
-@endphp
-
 <x-app-layout>
+  @if (session('success'))
+    <div class="bg-green-100 text-green-800 px-4 py-2 rounded mb-4">
+      {{ session('success') }}
+    </div>
+  @endif
+
   <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between mb-6">
       <h2 class="text-2xl font-bold text-[#4B433C]">Your Cart</h2>
-      <x-danger-button>Clear Cart</x-danger-button>
+      <form action="{{ route('cart.clear') }}" method="POST"
+        onsubmit="return confirm('Are you sure you want to clear the cart?');">
+        @csrf
+        @method('DELETE')
+        <x-danger-button>Clear Cart</x-danger-button>
+      </form>
+
     </div>
 
     <div class="bg-white shadow-md rounded-lg overflow-hidden">
@@ -34,7 +23,6 @@
           <tr>
             <th class="px-6 py-3 text-left text-sm font-semibold uppercase">Product</th>
             <th class="px-6 py-3 text-left text-sm font-semibold uppercase">Price</th>
-            <th class="px-6 py-3 text-left text-sm font-semibold uppercase">Quantity</th>
             <th class="px-6 py-3 text-left text-sm font-semibold uppercase">Total</th>
             <th class="py-3"></th>
           </tr>
@@ -49,18 +37,20 @@
                 </div>
               </td>
               <td class="px-6 py-4">₱ {{ number_format($item['price'], 2) }}</td>
-              <td class="px-6 py-4">
-                <div class="flex items-center gap-2">
-                  <button class="px-2 py-1 rounded bg-gray-200 hover:bg-gray-300">-</button>
-                  <span>{{ $item['quantity'] }}</span>
-                  <button class="px-2 py-1 rounded bg-gray-200 hover:bg-gray-300">+</button>
-                </div>
-              </td>
+
               <td class="px-6 py-4 font-semibold">
-                ₱ {{ number_format($item['price'] * $item['quantity'], 2) }}
+                ₱ {{ number_format($item['price'], 2) }}
               </td>
               <td class="px-6 py-4 text-right w-8">
-                <x-fas-delete-left class="w-6 h-6 primary-text-color" />
+                <form action="{{ route('cart.remove', $item['id']) }}" method="POST"
+                  onsubmit="return confirm('Remove this item from cart?');">
+                  @csrf
+                  @method('DELETE')
+                  <button type="submit">
+                    <x-fas-delete-left class="w-6 h-6 text-red-600 hover:text-red-800 transition" />
+                  </button>
+                </form>
+
               </td>
             </tr>
           @endforeach

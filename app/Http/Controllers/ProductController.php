@@ -36,7 +36,7 @@ class ProductController extends Controller
     {
         // $product->load('images');
         // return view('store.show', compact('product'));
-        return view('category.show');
+        // return view('category.show');
     }
 
     public function store(Request $request)

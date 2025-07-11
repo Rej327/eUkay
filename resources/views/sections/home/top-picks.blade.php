@@ -1,6 +1,5 @@
 <div class="px-4 my-10">
   <h3 class="text-4xl md:text-6xl uppercase text-[#4B433C] tracking-wide text-center mb-10">New Arrival</h3>
-
   <div x-data="{
       scrollAmount: 300,
       scrollLeft() { $refs.carousel.scrollBy({ left: -this.scrollAmount, behavior: 'smooth' }); },
@@ -29,17 +28,19 @@
             <x-product-details>Price: ₱{{ number_format($product->price, 2) }}</x-product-details>
           </div>
 
-          <div class="px-2 flex items-center justify-center gap-4 mt-2">
+          <div class="px-2 flex flex-col items-center justify-center gap-2 mt-2">
             <x-secondary-button class="w-full flex justify-center items-center">
               <a href="{{ route('product.show', $product->id) }}">Details</a>
             </x-secondary-button>
-            <x-primary-button class="w-full flex justify-center items-center">
-              <a href="#">Add to Cart</a>
-            </x-primary-button>
+            @include('components.add-to-cart-form', [
+                'product' => $product,
+                'cartItemProductIds' => $cartItemProductIds ?? [],
+            ])
           </div>
         </div>
       @empty
-        <p class="text-sm font-semibold text-gray-500 mt-10 text-center mx-auto w-fit">No new arrivals at the moment.</p>
+        <p class="text-sm font-semibold text-gray-500 mt-10 text-center mx-auto w-fit">No new arrivals at the moment.
+        </p>
       @endforelse
     </div>
 

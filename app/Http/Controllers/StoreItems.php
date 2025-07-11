@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class StoreItems extends Controller
 {
@@ -37,6 +39,8 @@ class StoreItems extends Controller
 
     public function show(Product $product)
     {
+        $user = Auth::user();
+
         $product->load('images', 'category');
 
         $relatedProducts = Product::with('images')
@@ -46,7 +50,16 @@ class StoreItems extends Controller
             ->take(3)
             ->get();
 
-        return view('category.show', compact('product', 'relatedProducts'));
+             $cartItemProductIds = [];
+        
+         if ($user) {
+            $cart = Cart::where('user_id', $user->id)->first();
+            $cartItemProductIds = $cart
+            ? $cart->items->pluck('product_id')->toArray()
+            : [];
+        }
+
+        return view('category.show', compact('product', 'relatedProducts', 'cartItemProductIds'));
     }
 
     /**
