@@ -49,11 +49,17 @@ class HomeController extends Controller
             : [];
         }
 
+        $wishlistProductIds = Auth::check()
+        ? Auth::user()->wishlist->pluck('product_id')->toArray()
+        : [];
+
+
         return view('home', [
             'category' => $category?->name,
             'products' => $products,
             'newArrivals' => $newArrivals,
             'cartItemProductIds' => $cartItemProductIds,
+            'wishlistProductIds' => $wishlistProductIds,
         ]);
     }
 }

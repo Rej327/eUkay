@@ -42,10 +42,27 @@
             </form>
           @endif
 
-          <button class="px-6 py-2 border border-[#4B433C] text-[#4B433C] rounded inline-flex items-center gap-2">
-            <x-heroicon-o-heart class="w-5 h-5" />
-            Add to Wishlist
-          </button>
+          @if (in_array($product->id, $wishlistProductIds ?? []))
+            <!-- Already in wishlist -->
+            <button disabled
+              class="px-6 py-2 bg-gray-400 text-white rounded inline-flex items-center gap-2 cursor-not-allowed"
+              title="Already in Wishlist">
+              <x-heroicon-o-heart class="w-5 h-5" />
+              Added
+            </button>
+          @else
+            <!-- Not yet in wishlist -->
+            <form action="{{ route('wishlist.add', $product->id) }}" method="POST">
+              @csrf
+              <button type="submit"
+                class="px-6 py-2 border border-[#4B433C] text-[#4B433C] rounded inline-flex items-center gap-2 hover:bg-[#4B433C] hover:text-white transition"
+                title="Add to Wishlist">
+                <x-heroicon-o-heart class="w-5 h-5" />
+                Add to Wishlist
+              </button>
+            </form>
+          @endif
+
 
           <button class="px-6 py-2 bg-green-600 text-white rounded inline-flex items-center gap-2">
             <x-pepicon-peso class="w-4 h-4" />

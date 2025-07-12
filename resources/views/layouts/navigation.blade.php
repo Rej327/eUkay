@@ -80,6 +80,9 @@
             <x-dropdown-link :href="route('profile.edit')">
               {{ __('Profile') }}
             </x-dropdown-link>
+            <x-dropdown-link :href="route('wishlist.index')">
+              {{ __('My Wishlist') }}
+            </x-dropdown-link>
             @auth
               @if (auth()->user()->isAdmin())
                 <x-dropdown-link :href="route('manage-products.index')">
@@ -159,7 +162,16 @@
         <x-responsive-nav-link :href="route('profile.edit')">
           {{ __('Profile') }}
         </x-responsive-nav-link>
-
+        <x-responsive-nav-link :href="route('wishlist.index')">
+          {{ __('My Wishlist') }}
+        </x-responsive-nav-link>
+        @auth
+          @if (auth()->user()->isAdmin())
+            <x-responsive-nav-link :href="route('manage-products.index')">
+              {{ __('My Products') }}
+            </x-responsive-nav-link>
+          @endif
+        @endauth
         <!-- Authentication -->
         <form method="POST" action="{{ route('logout') }}">
           @csrf

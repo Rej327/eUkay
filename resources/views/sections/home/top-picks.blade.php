@@ -18,8 +18,23 @@
                 No Image
               </div>
             @endif
-            <x-eva-heart
-              class="absolute top-2 right-2 w-8 primary-text-color opacity-50 hover:opacity-100 duration-300" />
+            
+            @if (in_array($product->id, $wishlistProductIds ?? []))
+              <!-- Already in wishlist -->
+              <div class="absolute top-2 right-2" title="Already in Wishlist">
+                <x-eva-heart class="w-8 text-red-500 opacity-100" />
+              </div>
+            @else
+              <!-- Not in wishlist, allow add -->
+              <form action="{{ route('wishlist.add', $product->id) }}" method="POST" class="absolute top-2 right-2">
+                @csrf
+                <button type="submit" title="Add to Wishlist">
+                  <x-eva-heart class="w-8 primary-text-color opacity-50 hover:opacity-100 duration-300" />
+                </button>
+              </form>
+            @endif
+
+
           </div>
 
           <div class="space-y-0 mt-2 px-2 text-center">

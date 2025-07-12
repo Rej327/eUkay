@@ -89,7 +89,7 @@
         </div>
       </div>
     @empty
-      <p class="text-center text-gray-500 text-sm mt-10">No products found in this category.</p>
+      <p class="text-sm font-semibold text-gray-500 mt-10 text-center mx-auto w-fit">No products found in this category.</p>
     @endforelse
   </div>
 </div>

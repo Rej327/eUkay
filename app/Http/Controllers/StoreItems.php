@@ -59,7 +59,11 @@ class StoreItems extends Controller
             : [];
         }
 
-        return view('category.show', compact('product', 'relatedProducts', 'cartItemProductIds'));
+        $wishlistProductIds = Auth::check()
+        ? Auth::user()->wishlist->pluck('product_id')->toArray()
+        : [];
+
+        return view('category.show', compact('product', 'relatedProducts', 'cartItemProductIds', 'wishlistProductIds'));
     }
 
     /**
