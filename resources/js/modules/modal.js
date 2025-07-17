@@ -64,5 +64,23 @@ export function useModal() {
             const fileInput = document.getElementById("image");
             if (fileInput) fileInput.value = "";
         },
+
+        openServerErrorModal(oldValues, errors) {
+            this.modalOpen = true;
+            this.isEdit = false;
+            this.form = {
+                ...this.form,
+                ...oldValues,
+            };
+
+            this.errors = {
+                name: errors.name || [],
+                price: errors.price || [],
+                stock: errors.stock || [],
+                description: errors.description || [],
+                category_id: errors.category_id || [],
+                image: errors.image || [],
+            };
+        },
     };
 }

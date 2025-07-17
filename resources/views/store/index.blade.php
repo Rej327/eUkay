@@ -68,7 +68,7 @@
                 </td>
                 <td class="px-4 py-3 font-medium" x-text="product.name"></td>
                 <td class="px-4 py-3" x-text="`₱ ${parseFloat(product.price).toFixed(2)}`"></td>
-             
+
                 <td class="px-4 py-3"
                   x-text="new Date(product.updated_at).toLocaleString('en-US', { 
                             month: 'short', 
@@ -107,7 +107,8 @@
     </div>
 
     <!-- Add/Edit Modal -->
-    <div x-show="modalOpen" x-cloak class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+    <div x-data="productForm()" x-init="initializeForm()" x-show="modalOpen" x-cloak
+      class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
       <div @click.outside="closeModal" class="bg-white w-full max-w-xl rounded-lg shadow-lg p-6 m-6 md:m-0 relative">
         <h2 class="text-xl font-bold text-[#4B433C] mb-4" x-text="isEdit ? 'Edit Product' : 'Add Product'"></h2>
 
@@ -233,14 +234,13 @@
   <script>
     window.initialProducts = @json($products);
     window.routeStore = @json(route('manage-products.store'));
-  </script>
 
-  @if ($errors->any())
-    <script>
+    @if ($errors->any())
       window.validationErrors = @json($errors->messages());
       window.oldValues = @json(old());
-    </script>
-  @endif
+    @endif
+  </script>
+
 
 
 </x-app-layout>

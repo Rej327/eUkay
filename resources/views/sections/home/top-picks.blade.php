@@ -18,7 +18,7 @@
                 No Image
               </div>
             @endif
-            
+
             @if (in_array($product->id, $wishlistProductIds ?? []))
               <!-- Already in wishlist -->
               <div class="absolute top-2 right-2" title="Already in Wishlist">
@@ -33,8 +33,6 @@
                 </button>
               </form>
             @endif
-
-
           </div>
 
           <div class="space-y-0 mt-2 px-2 text-center">
@@ -47,10 +45,12 @@
             <x-secondary-button class="w-full flex justify-center items-center">
               <a href="{{ route('product.show', $product->id) }}">Details</a>
             </x-secondary-button>
-            @include('components.add-to-cart-form', [
-                'product' => $product,
-                'cartItemProductIds' => $cartItemProductIds ?? [],
-            ])
+            <div class="w-full">
+              @include('components.add-to-cart-form', [
+                  'product' => $product,
+                  'cartItemProductIds' => $cartItemProductIds ?? [],
+              ])
+            </div>
           </div>
         </div>
       @empty

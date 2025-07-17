@@ -69,10 +69,14 @@ class ProductController extends Controller
 
             return redirect()->route('manage-products.index')->with('success', 'Product added successfully.');
         } catch (\Illuminate\Validation\ValidationException $e) {
-            return redirect()->back()->withErrors($e->validator)->withInput();
+            // \Log::error('Product Store Validation Error: ' . $e->getMessage());
+            return redirect()->back()->withErrors($e->validator)->withInput()->with('show_modal', true);
         } catch (\Exception $e) {
             return redirect()->route('manage-products.index')->with('error', 'Failed to add product.');
         }
+        // catch (\Exception $e) {
+        // \Log::error('Product Store Error: ' . $e->getMessage());
+        // throw $e;}  
     }
 
     public function edit(Product $product)
