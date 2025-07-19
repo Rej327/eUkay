@@ -5,12 +5,21 @@
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PayMongoController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StoreItems;
 use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
+Route::get('clear', function() {
+    \Artisan::call('cache:clear');
+    \Artisan::call('config:clear');
+    \Artisan::call('route:clear');
+    \Artisan::call('view:clear');
+    return 'Cache is cleared';
+});
 
 Route::get('/', function () {
     if(Auth::check()) {
@@ -53,9 +62,15 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
     Route::post('/wishlist/{productId}', [WishlistController::class, 'store'])->name('wishlist.add');
-    Route::delete('/wishlist/{id}', [WishlistController::class, 'destroy'])->name('wishlist.remove');
+    Route::delete('/wishlist/{id}', action: [WishlistController::class, 'destroy'])->name('wishlist.remove');
     // Route::post('/wishlist/add-all-to-cart', [WishlistController::class, 'addAllToCart'])->name('wishlist.addAllToCart');
     Route::delete('/wishlist', [WishlistController::class, 'clear'])->name('wishlist.clear');
+
+    Route::post('/checkout', [PayMongoController::class, 'checkout'])->name('checkout');
+    Route::get('/payment/success', [PayMongoController::class, 'success'])->name('payment.success');
+    Route::get('/payment/failed', [PayMongoController::class, 'failed'])->name('payment.failed');
+
+
 
 
         

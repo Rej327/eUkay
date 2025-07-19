@@ -94,10 +94,15 @@
         </div>
 
         <!-- Checkout Button -->
-        <button
-          class="w-full bg-[#4B433C] hover:bg-[#3a322d] text-white font-medium py-2 rounded-md shadow transition duration-200">
-          Proceed to Checkout
-        </button>
+        <form action="{{ route('checkout') }}" method="POST">
+          @csrf
+          <input type="hidden" name="amount" value="{{ $total }}">
+          <button
+            class="w-full bg-[#4B433C] hover:bg-[#3a322d] text-white font-medium py-2 rounded-md shadow transition duration-200">
+            Proceed to Checkout with PayMongo
+          </button>
+        </form>
+
 
 
       </div>
