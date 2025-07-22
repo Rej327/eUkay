@@ -106,6 +106,7 @@
             </div>
             <div class="space-y-0 mt-2 px-2 text-center">
               <x-product-details>{{ $related->name }}</x-product-details>
+              <x-product-details>{{ $related->description }}</x-product-details>
               <x-product-details>₱{{ number_format($related->price, 2) }}</x-product-details>
             </div>
             <div class="px-2 flex flex-col items-center justify-center gap-2 mt-2">

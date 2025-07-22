@@ -86,8 +86,8 @@
 
         <div class="space-y-0 mt-2 px-2 text-center">
           <x-product-details>{{ $product->name }}</x-product-details>
-          <x-product-details>Size: Medium</x-product-details> {{-- replace if needed --}}
-          <x-product-details>Price: ₱{{ number_format($product->price, 2) }}</x-product-details>
+          <x-product-details>{{$product->description}}</x-product-details>
+          <x-product-details>₱{{ number_format($product->price, 2) }}</x-product-details>
         </div>
 
         <div class="px-2 flex flex-col items-center justify-center gap-2 mt-2">
@@ -109,7 +109,6 @@
   </div>
 </div>
 
-<!-- JS to Submit and Reset -->
 <!-- JS -->
 <script>
   function submitAndReset(select) {
