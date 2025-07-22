@@ -87,8 +87,22 @@
                   No Image
                 </div>
               @endif
-              <x-eva-heart
-                class="absolute top-2 right-2 w-6 primary-text-color opacity-50 hover:opacity-100 duration-300" />
+
+              @if (in_array($related->id, $wishlistProductIds ?? []))
+                <!-- Already in wishlist -->
+                <div class="absolute top-2 right-2" title="Already in Wishlist">
+                  <x-eva-heart class="w-8 text-red-500 opacity-100" />
+                </div>
+              @else
+                <!-- Not in wishlist, allow add -->
+                <form action="{{ route('wishlist.add', $related->id) }}" method="POST" class="absolute top-2 right-2">
+                  @csrf
+                  <button type="submit" title="Add to Wishlist">
+                    <x-eva-heart class="w-8 primary-text-color opacity-50 hover:opacity-100 duration-300" />
+                  </button>
+                </form>
+              @endif
+
             </div>
             <div class="space-y-0 mt-2 px-2 text-center">
               <x-product-details>{{ $related->name }}</x-product-details>
@@ -98,7 +112,12 @@
               <x-secondary-button class="w-full flex justify-center items-center">
                 <a href="{{ route('product.show', $related->id) }}">Details</a>
               </x-secondary-button>
-              @include('components.add-to-cart-form', ['product' => $product])
+              <div class="w-full">
+                @include('components.add-to-cart-form', [
+                    'product' => $related,
+                    'cartItemProductIds' => $cartItemProductIds ?? [],
+                ])
+              </div>
             </div>
           </div>
         @empty
