@@ -26,7 +26,7 @@ class PayMongoController extends Controller
               'data' => [
                   'attributes' => [
                       'amount' => $amount,
-                      'description' => 'Ukay product order',
+                      'description' => 'Ukay product order (shipping fee included)',
                       'remarks' => 'Thank you for shopping!',
                       'redirect' => [
                           'success' => route('payment.success'),

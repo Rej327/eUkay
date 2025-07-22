@@ -63,11 +63,14 @@
             </form>
           @endif
 
-
-          <button class="px-6 py-2 bg-green-600 text-white rounded inline-flex items-center gap-2">
-            <x-pepicon-peso class="w-4 h-4" />
-            Buy Now
-          </button>
+          <form action="{{ route('checkout') }}" method="POST">
+            @csrf
+            <input type="hidden" name="amount" value="{{ $product->price + 10 }}">
+            <button class="px-6 py-2 bg-green-600 text-white rounded inline-flex items-center gap-2">
+              <x-pepicon-peso class="w-4 h-4" />
+              Buy Now
+            </button>
+          </form>
         </div>
       </div>
     </div>
