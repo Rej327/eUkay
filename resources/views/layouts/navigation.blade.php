@@ -46,9 +46,15 @@
             <x-css-search class="w-5 h-5 text-gray-500" />
           </button>
 
-          <!-- Shopping Bag Icon -->
-          <a href="{{ route('cart.index') }}">
+          <!-- Shopping Bag Icon with Count -->
+          <a href="{{ route('cart.index') }}" class="relative inline-block">
             <x-tni-bag class="w-5 h-5 text-gray-500" />
+
+            @if ($cartItemCount > 0)
+              <span class="absolute -top-2 -right-2 z-50 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5">
+                {{ $cartItemCount }}
+              </span>
+            @endif
           </a>
 
           <!-- Search Input (use x-show instead of x-if) -->
