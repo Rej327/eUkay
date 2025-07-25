@@ -62,15 +62,23 @@
               </button>
             </form>
           @endif
-
-          <form action="{{ route('checkout') }}" method="POST">
-            @csrf
-            <input type="hidden" name="amount" value="{{ $product->price + 10 }}">
-            <button class="px-6 py-2 bg-green-600 text-white rounded inline-flex items-center gap-2">
-              <x-pepicon-peso class="w-4 h-4" />
-              Buy Now
+          @if ($product->is_sold)
+            <button disabled
+              class="px-6 py-2 bg-gray-400 text-white rounded inline-flex items-center gap-2 cursor-not-allowed">
+              <x-eva-close-circle class="w-5 h-5" />
+              Sold Out
             </button>
-          </form>
+          @else
+            <form action="{{ route('checkout') }}" method="POST">
+              @csrf
+              <input type="hidden" name="amount" value="{{ $product->price + 10 }}">
+              <input type="hidden" name="product_id" value="{{ $product->id }}">
+              <button class="px-6 py-2 bg-green-600 text-white rounded inline-flex items-center gap-2">
+                <x-pepicon-peso class="w-4 h-4" />
+                Buy Now
+              </button>
+            </form>
+          @endif
         </div>
       </div>
     </div>

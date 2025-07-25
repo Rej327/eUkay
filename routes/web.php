@@ -69,6 +69,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/checkout', [PayMongoController::class, 'checkout'])->name('checkout');
     Route::get('/payment/success', [PayMongoController::class, 'success'])->name('payment.success');
     Route::get('/payment/failed', [PayMongoController::class, 'failed'])->name('payment.failed');
+    Route::post('/webhook/paymongo', [PayMongoController::class, 'handleWebhook']);
+
 
 
 
