@@ -2,22 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use App\Models\Product;
 
 class PayMongoController extends Controller
 {
     public function checkout(Request $request)
     {
-        $amount = (int) $request->input('amount') * 100;
+        $amount = (int) $request->input('amount') * 100; // Convert to centavos
 
-        if ($amount < 10000) {
-            return back()->with('error', 'Minimum checkout amount for PayMongo is ₱100.');
+        $productIds = (array) $request->input('product_ids', []);
+
+        if (empty($productIds)) {
+            return back()->with('error', 'No products selected.');
         }
 
-        // Save the product ID in the session
-        session(['product_id' => $request->input('product_id')]);
+        // Optional: mark as sold before payment (manual testing mode)
+        Product::whereIn('id', $productIds)->update(['is_sold' => true]);
 
         $response = Http::withHeaders([
             'accept' => 'application/json',
@@ -27,7 +29,7 @@ class PayMongoController extends Controller
             'data' => [
                 'attributes' => [
                     'amount' => $amount,
-                    'description' => 'Ukay product order (shipping fee included)',
+                    'description' => 'Ukay product order',
                     'remarks' => 'Thank you for shopping!',
                     'redirect' => [
                         'success' => route('payment.success'),
@@ -35,51 +37,46 @@ class PayMongoController extends Controller
                     ],
                     'payment_method_types' => ['gcash', 'paymaya', 'card'],
                     'metadata' => [
-                        'product_id' => $request->input('product_id'),
+                        'product_ids' => $productIds,
                     ],
                 ],
             ],
         ]);
 
         if ($response->successful()) {
-            return redirect()->away($response->json('data.attributes.checkout_url'));
-        } else {
-            logger()->error('PayMongo error: ' . $response->body());
-            return back()->with('error', 'Payment failed. Please try again.');
-        }
-    }
-
-    public function handleWebhook(Request $request)
-    {
-        $payload = $request->input('data.attributes');
-
-        if ($payload['status'] === 'paid') {
-            // Assuming you stored product_id in the remarks or metadata
-            $productId = $request->input('data.attributes.metadata.product_id');
-
-            if ($productId) {
-                Product::where('id', $productId)->update(['is_sold' => true]);
+            $checkoutUrl = $response->json('data.attributes.checkout_url');
+            
+            if ($checkoutUrl) {
+                return redirect()->away($checkoutUrl); // <-- This is crucial!
+            } else {
+                return back()->with('error', 'Checkout URL not found.');
             }
         }
 
-        return response()->json(['message' => 'Webhook handled']);
+        return back()->with('error', 'Payment failed. Please try again.');
     }
-
-
 
     public function success()
     {
-        $productId = session('product_id');
+        $productIds = session('product_ids', []);
 
-        if ($productId) {
-            Product::where('id', $productId)->update(['is_sold' => true]);
-            session()->forget('product_id'); // Clear the session after use
+        if (empty($productIds)) {
+            return redirect()->route('home')->with('error', 'No product found in session.');
         }
 
-        return view('checkout.success')->with('message', 'Payment successful! Product marked as sold.');
+        // Optional: Forget after use
+        session()->forget('product_ids');
+
+        $products = Product::whereIn('id', $productIds)->get();
+
+        foreach ($products as $product) {
+            if (!$product->is_sold) {
+                $product->update(['is_sold' => true]);
+            }
+        }
+
+        return view('payments.success');
     }
-
-
 
     public function failed()
     {

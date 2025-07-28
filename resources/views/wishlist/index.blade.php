@@ -59,18 +59,12 @@
                     <a href="{{ route('product.show', $item->product->id) }}">
                       <x-secondary-button class="w-full md:w-28 justify-center">View</x-secondary-button>
                     </a>
-
-                    @if (in_array($item->product->id, $cartProductIds ?? []))
-                      <button disabled
-                        class="w-full md:w-28 px-4 py-2 rounded bg-gray-300 text-white font-medium text-sm cursor-not-allowed">
-                        Added
-                      </button>
-                    @else
-                      <form action="{{ route('cart.add', $item->product->id) }}" method="POST">
-                        @csrf
-                        <x-primary-button class="w-full md:w-28 justify-center">Add to Cart</x-primary-button>
-                      </form>
-                    @endif
+                    <div class="">
+                      @include('components.add-to-cart-form', [
+                          'product' => $item->product,
+                          'cartItemProductIds' => $cartItemProductIds ?? [],
+                      ])
+                    </div>
 
                     <x-danger-button @click="confirmDelete({{ $item->id }})"
                       class="w-full md:w-28 justify-center">Remove</x-danger-button>
